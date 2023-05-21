@@ -1,6 +1,6 @@
 package Blockchain::Ethereum::Transaction;
 
-use 5.006;
+use v5.26;
 use strict;
 use warnings;
 
@@ -8,29 +8,12 @@ use Carp;
 use Crypt::PK::ECC;
 use Crypt::Perl::ECDSA::Parse;
 use Digest::Keccak qw(keccak_256);
-use Digest::SHA;
 
-use Blockchain::Ethereum::RLP::Encoder;
-
-use Data::Dumper;
-
-sub new {
-    my ($class, %params) = @_;
-
-    my $self = bless {}, $class;
-
-    for my $k (qw(chain_id nonce gas_price gas_limit from to value data v r s)) {
-        $self->{$k} = delete $params{$k} if exists $params{$k};
-    }
-
-    $self->{chain_id} //= '0x1';
-
-    return $self;
-}
+use Blockchain::Ethereum::RLP;
 
 sub rlp {
     my $self = shift;
-    return $self->{rlp} //= Blockchain::Ethereum::RLP::Encoder->new();
+    return $self->{rlp} //= Blockchain::Ethereum::RLP->new();
 }
 
 sub sign {
@@ -64,66 +47,6 @@ sub sign {
     # return signed raw transaction
     return unpack "H*", $signed_rlp;
 }
-
-sub serialize_unsigned {
-    my ($self) = @_;
-
-    my @params = (
-        $self->{nonce},        #
-        $self->{gas_price},    #
-        $self->{gas_limit},    #
-        $self->{to},           #
-        $self->{value},        #
-        $self->{data},         #
-        $self->{chain_id},     #
-        '0x',                  #
-        '0x',
-    );
-
-    return $self->rlp->encode(\@params);
-}
-
-sub serialize_signed {
-    my ($self) = @_;
-
-    my @params = (
-        $self->{nonce},        #
-        $self->{gas_price},    #
-        $self->{gas_limit},    #
-        $self->{to},           #
-        $self->{value},        #
-        $self->{data},         #
-        $self->{v},            #
-        $self->{r},            #
-        $self->{s},
-    );
-
-    return $self->rlp->encode(\@params);
-}
-
-my $transaction = Blockchain::Ethereum::Transaction->new(
-    nonce     => '0x9',
-    gas_price => '0x4A817C800',
-    gas_limit => '0x5208',
-    to        => '0x3535353535353535353535353535353535353535',
-    value     => '0xDE0B6B3A7640000',
-    data      => '0x',
-    chain_id  => '0x539'
-);
-
-print Dumper $transaction->sign('4646464646464646464646464646464646464646464646464646464646464646');
-
-# my $transaction = Blockchain::Ethereum::Transaction->new(
-#     nonce     => '0x1',
-#     gas_price => '0x4A817C800',
-#     gas_limit => '0x5208',
-#     to        => '0x3535353535353535353535353535353535353535',
-#     value     => '0xDE0B6B3A7640000',
-#     data      => '0x',
-#     chain_id  => '0x539'
-# );
-
-# $transaction->sign('7906b128ed1bd10e0c8057c29735c9203d4cdfb344a1e9d83e7646cf36860e36');
 
 =head1 NAME
 
