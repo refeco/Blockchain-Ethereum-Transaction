@@ -11,6 +11,31 @@ use Digest::Keccak qw(keccak_256);
 
 use Blockchain::Ethereum::RLP;
 
+sub tx_format {
+    croak 'tx_format method not implemented';
+}
+
+sub serialize {
+    croak 'terialize method not implemented';
+}
+
+sub new {
+    my ($class, %params) = @_;
+
+    my $self = bless {}, $class;
+
+    for my $k ($self->tx_format->@*) {
+        $self->{$k} = delete $params{$k} if exists $params{$k};
+    }
+
+    croak "Invalid params for transaction type" if keys %params;
+
+    # set the chain_id to mainnet by default if not given
+    $self->{chain_id} //= '0x1';
+
+    return $self;
+}
+
 sub rlp {
     my $self = shift;
     return $self->{rlp} //= Blockchain::Ethereum::RLP->new();
@@ -26,7 +51,7 @@ sub sign {
     # Crypt::PK::ECC does not provide support for deterministic keys
     my $pk = Crypt::Perl::ECDSA::Parse::private($importer->export_key_der('private'));
 
-    my $unsigned_rlp = $self->serialize_unsigned;
+    my $unsigned_rlp = $self->serialize;
 
     my $tx_hash = keccak_256($unsigned_rlp);
 
@@ -42,7 +67,7 @@ sub sign {
     my $v = (hex $self->{chain_id}) * (2 + 35);
     $self->{v} = "0x" . sprintf("%x", $v);
 
-    my $signed_rlp = $self->serialize_signed();
+    my $signed_rlp = $self->serialize(1);
 
     # return signed raw transaction
     return unpack "H*", $signed_rlp;

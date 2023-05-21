@@ -1,4 +1,4 @@
-package Blockchain::Ethereum::Transaction::Legacy;
+package Blockchain::Ethereum::Transaction::EIP1559;
 
 use v5.26;
 use strict;
@@ -9,7 +9,7 @@ use Carp;
 use parent qw(Blockchain::Ethereum::Transaction);
 
 sub tx_format {
-    return [qw(chain_id nonce gas_price gas_limit to value data v r s)];
+    return [qw(chain_id nonce max_fee_per_gas max_priority_fee_per_gas gas_limit to value data v r s)];
 }
 
 sub serialize {
@@ -17,7 +17,8 @@ sub serialize {
 
     my @params = (
         $self->{nonce},    #
-        $self->{gas_price},
+        $self->{max_fee_per_gas},
+        $self->{max_priority_fee_per_gas},
         $self->{gas_limit},
         $self->{to},
         $self->{value},
@@ -34,3 +35,4 @@ sub serialize {
 }
 
 1;
+
