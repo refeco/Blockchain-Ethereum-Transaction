@@ -19,9 +19,9 @@ sub serialize {
         $self->{nonce},    #
         $self->{gas_price},
         $self->{gas_limit},
-        $self->{to},
-        $self->{value},
-        $self->{data},
+        $self->{to} // '',
+        $self->{value} // '',
+        $self->{data} // '',
     );
 
     if ($signed) {

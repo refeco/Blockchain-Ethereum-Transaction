@@ -8,6 +8,7 @@ use Carp;
 use Crypt::PK::ECC;
 use Crypt::Perl::ECDSA::Parse;
 use Digest::Keccak qw(keccak_256);
+use Digest::SHA;
 
 use Blockchain::Ethereum::RLP;
 
@@ -58,13 +59,27 @@ sub sign {
     # if we use the external method sign_sha256 it encodes
     # the key using Digest::SHA::sha256, to avoid that we
     # call the internal function without it
+    # my ($r, $s) = $pk->_sign(Digest::SHA::sha256($tx_hash), 'sha256');
     my ($r, $s) = $pk->_sign($tx_hash, 'sha256');
 
     $self->{r} = $r->as_hex;
     $self->{s} = $s->as_hex;
 
+    my $curve = $pk->_curve();
+    my $G     = $pk->_G();
+    my $n     = $curve->{n};
+    my $k     = Crypt::Perl::ECDSA::Deterministic::generate_k($n, $pk->{private}, $tx_hash, 'sha256');
+    my $Q     = $G->multiply($k);
+
+    my $recovery_id = ($Q->get_y->to_bigint->is_odd() ? 1 : 0) | ($Q->get_x->to_bigint->bcmp($r) != 0 ? 2 : 0);
+
+    if ($s->bcmp($n->copy->bdiv(2) > 0)) {
+        $self->{s} = $n->copy->bsub($s)->as_hex;
+        $recovery_id ^= 1;
+    }
+
     # EIP-155
-    my $v = (hex $self->{chain_id}) * (2 + 35);
+    my $v = (hex $self->{chain_id}) * 2 + 35 + $recovery_id;
     $self->{v} = "0x" . sprintf("%x", $v);
 
     my $signed_rlp = $self->serialize(1);
@@ -75,7 +90,7 @@ sub sign {
 
 =head1 NAME
 
-Blockchain::Ethereum::Transaction - The great new Blockchain::Ethereum::Transaction!
+Blockchain::Ethereum::Transaction - Ethereum transaction abstraction
 
 =head1 VERSION
 

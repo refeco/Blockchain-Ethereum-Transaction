@@ -17,12 +17,12 @@ sub serialize {
 
     my @params = (
         $self->{nonce},    #
-        $self->{max_fee_per_gas},
         $self->{max_priority_fee_per_gas},
+        $self->{max_fee_per_gas},
         $self->{gas_limit},
-        $self->{to},
-        $self->{value},
-        $self->{data},
+        $self->{to} // '',
+        $self->{value} // '',
+        $self->{data} // '',
     );
 
     if ($signed) {
@@ -31,6 +31,8 @@ sub serialize {
         push(@params, $self->{chain_id}, '0x', '0x');
     }
 
+    use Data::Dumper;
+    print Dumper @params;
     return $self->rlp->encode(\@params);
 }
 
