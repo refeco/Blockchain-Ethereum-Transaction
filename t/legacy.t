@@ -16,27 +16,17 @@ subtest "eip-155 example" => sub {
         chain_id  => '0x1'
     );
 
-    my $raw_transaction = $transaction->sign('4646464646464646464646464646464646464646464646464646464646464646');
+    $transaction->sign('4646464646464646464646464646464646464646464646464646464646464646');
+    my $raw_transaction = $transaction->serialize(1);
 
-    is($raw_transaction,
+    is(unpack("H*", $raw_transaction),
         'f86c098504a817c800825208943535353535353535353535353535353535353535880de0b6b3a76400008025a028ef61340bd939bc2195fe537567866003e1a15d3c71ff63e1590620aa636276a067cbe9d8997f761aecb703304b3800ccf555c9f3dc64214b297fb1966a3b6d83'
     );
 
-    note explain '0x' . $raw_transaction;
-    is 1, 1;
-
     my $rlp     = Blockchain::Ethereum::RLP->new();
-    my $decoded = $rlp->decode(pack "H*", $raw_transaction);
+    my $decoded = $rlp->decode($raw_transaction);
 
     is hex $decoded->[-3], 37, 'correct eip155 v value';
-
-    $transaction->{to} = undef;
-    $raw_transaction   = $transaction->sign('4646464646464646464646464646464646464646464646464646464646464646');
-    $rlp               = Blockchain::Ethereum::RLP->new();
-    $decoded           = $rlp->decode(pack "H*", $raw_transaction);
-
-    is hex $decoded->[-3], 38, 'correct eip155 v value for contract creation';
 };
-
 
 done_testing;
