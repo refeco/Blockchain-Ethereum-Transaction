@@ -10,7 +10,7 @@ use Crypt::Perl::ECDSA::Parse;
 use Digest::Keccak qw(keccak_256);
 
 use Blockchain::Ethereum::RLP;
-use Blockchain::Ethereum::Transaction::Signature;
+use Blockchain::Ethereum::Transaction::PrivateKey;
 
 sub tx_format {
     croak 'tx_format method not implemented';
@@ -18,6 +18,10 @@ sub tx_format {
 
 sub serialize {
     croak 'terialize method not implemented';
+}
+
+sub set_v {
+    croak 'set_v method not implemented';
 }
 
 sub new {
@@ -50,7 +54,8 @@ sub sign {
     my $importer = Crypt::PK::ECC->new();
     $importer->import_key_raw(pack('H*', $private_key), 'secp256k1');
     # Crypt::PK::ECC does not provide support for deterministic keys
-    my $pk = Blockchain::Ethereum::Transaction::Signature->new(Crypt::Perl::ECDSA::Parse::private($importer->export_key_der('private')));
+    my $pk = Blockchain::Ethereum::Transaction::PrivateKey->new(    #
+        Crypt::Perl::ECDSA::Parse::private($importer->export_key_der('private')));
 
     my $unsigned_rlp = $self->serialize;
 
@@ -59,14 +64,12 @@ sub sign {
     # if we use the external method sign_sha256 it encodes
     # the key using Digest::SHA::sha256, to avoid that we
     # call the internal function without it
-    my ($r, $s, $recovery_id) = $pk->_sign($tx_hash, 'sha256');
+    my ($r, $s, $y) = $pk->_sign($tx_hash, 'sha256');
 
     $self->{r} = $r->as_hex;
     $self->{s} = $s->as_hex;
 
-    # EIP-155
-    my $v = (hex $self->{chain_id}) * 2 + 35 + $recovery_id;
-    $self->{v} = "0x" . sprintf("%x", $v);
+    $self->set_v($y);
 
     return $self;
 }
