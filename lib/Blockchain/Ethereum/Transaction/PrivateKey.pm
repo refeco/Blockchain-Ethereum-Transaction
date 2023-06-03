@@ -90,7 +90,7 @@ the transaction.
 
 =head2 _sign
 
-Overwrites L<Crypt::Perl::ECDSA::PrivateKey> adding the recovery_id to the response
+Overwrites L<Crypt::Perl::ECDSA::PrivateKey> adding the y-parity to the response
 
 =over 4
 
