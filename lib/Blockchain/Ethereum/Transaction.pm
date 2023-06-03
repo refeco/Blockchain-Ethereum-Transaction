@@ -122,13 +122,54 @@ self
 
 =cut
 
+=head2 tx_format
+
+To be implemented by the child classes, it will determine if all required fields
+for the transaction type are given.
+
+=over 4
+
+=back
+
+Returns a array reference containing the avaialble fields for the transaction type
+
+=cut
+
+=head2 serialize
+
+To be implemented by the child classes, encodes the given transaction parameters to RLP
+
+=over 4
+
+=item * C<$signed> boolean to idenfity if the transaction is already signed (adds v r s if true) or not
+
+=back
+
+Returns the RLP encoded transaction bytes
+
+=cut
+
+=head2 set_v
+
+To be implemented by the child classes, set the v transaction field using the given y-parity
+
+=over 4
+
+=item * C<$y> y-parity 
+
+=back
+
+Returns the v hexadecimal value also sets the v fields from transaction
+
+=cut
+
 =head1 AUTHOR
 
 Reginaldo Costa, C<< <refeco at cpan.org> >>
 
 =head1 BUGS
 
-Please report any bugs or feature requests to L<https://github.com/refeco/perl-ABI>
+Please report any bugs or feature requests to L<https://github.com/refeco/perl-ethereum-transaction>
 
 =head1 SUPPORT
 
