@@ -24,11 +24,14 @@ my %WriteMakefileArgs = (
         'ExtUtils::MakeMaker' => '0',
     },
     TEST_REQUIRES => {
-        'Test::More' => '0',
+        'Test::More' => '0.98',
     },
     PREREQ_PM => {
-        #'ABC'              => '1.6',
-        #'Foo::Bar::Module' => '5.0401',
+        'Blockchain::Ethereum::RLP' => '0.002',
+        'Digest::Keccak'            => '0.05',
+        'Carp'                      => '1.50',
+        'Crypt::PK::ECC'            => '0.078',
+        'Crypt::Perl'               => '0.38',
     },
     dist => {
         COMPRESS => 'gzip -9f',

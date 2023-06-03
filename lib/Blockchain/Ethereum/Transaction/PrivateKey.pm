@@ -37,7 +37,6 @@ sub _sign {
 
     do {
         if ($det_hashfuncname) {
-            require Crypt::Perl::ECDSA::Deterministic;
             $k = Crypt::Perl::ECDSA::Deterministic::generate_k($n, $priv_num, $whatsit, $det_hashfuncname,);
         } else {
             $k = Crypt::Perl::Math::randint($n);
