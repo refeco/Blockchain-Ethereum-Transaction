@@ -10,7 +10,7 @@ use Crypt::Perl::ECDSA::Parse;
 use Digest::Keccak qw(keccak_256);
 
 use Blockchain::Ethereum::RLP;
-use Blockchain::Ethereum::Transaction::PrivateKey;
+use Blockchain::Ethereum::PrivateKey;
 
 sub tx_format {
     croak 'tx_format method not implemented';
@@ -54,7 +54,7 @@ sub sign {
     my $importer = Crypt::PK::ECC->new();
     $importer->import_key_raw(pack('H*', $private_key), 'secp256k1');
     # Crypt::PK::ECC does not provide support for deterministic keys
-    my $pk = Blockchain::Ethereum::Transaction::PrivateKey->new(    #
+    my $pk = Blockchain::Ethereum::PrivateKey->new(    #
         Crypt::Perl::ECDSA::Parse::private($importer->export_key_der('private')));
 
     my $unsigned_rlp = $self->serialize;
@@ -155,7 +155,7 @@ To be implemented by the child classes, set the v transaction field using the gi
 
 =over 4
 
-=item * C<$y> y-parity 
+=item * C<$y> y-parity
 
 =back
 
@@ -186,4 +186,3 @@ This is free software, licensed under:
   The MIT License
 
 =cut
-

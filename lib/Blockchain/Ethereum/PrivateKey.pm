@@ -1,4 +1,4 @@
-package Blockchain::Ethereum::Transaction::PrivateKey;
+package Blockchain::Ethereum::PrivateKey;
 
 use v5.26;
 use strict;
@@ -110,13 +110,13 @@ Reginaldo Costa, C<< <refeco at cpan.org> >>
 
 =head1 BUGS
 
-Please report any bugs or feature requests to L<https://github.com/refeco/perl-RPL>
+Please report any bugs or feature requests to L<https://github.com/refeco/perl-ethereum-transaction>
 
 =head1 SUPPORT
 
 You can find documentation for this module with the perldoc command.
 
-    perldoc Blockchain::Ethereum::Transaction::PrivateKey
+    perldoc Blockchain::Ethereum::PrivateKey
 
 =head1 LICENSE AND COPYRIGHT
 

@@ -27,7 +27,7 @@ my %WriteMakefileArgs = (
         'Test::More' => '0.98',
     },
     PREREQ_PM => {
-        'Blockchain::Ethereum::RLP' => '0.002',
+        'Blockchain::Ethereum::RLP' => '0.003',
         'Digest::Keccak'            => '0.05',
         'Carp'                      => '1.50',
         'Crypt::PK::ECC'            => '0.078',

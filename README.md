@@ -72,4 +72,3 @@ This software is Copyright (c) 2022 by REFECO.
 This is free software, licensed under:
 
   [The MIT License](./LICENSE)
-
