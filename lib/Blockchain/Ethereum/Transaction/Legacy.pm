@@ -88,7 +88,16 @@ Determines if all required fields for the transaction type are given.
 
 Expected fields:
 
-chain_id nonce gas_price gas_limit to value data v r s
+    - chain_id
+    - nonce
+    - gas_price
+    - gas_limit
+    - to
+    - value
+    - data
+    - v
+    - r
+    - s
 
 =over 4
 
@@ -101,6 +110,10 @@ Returns a array reference containing the avaialble fields for the transaction ty
 =head2 serialize
 
 Encodes the given transaction parameters to RLP
+
+Usage:
+
+    serialize(1) -> RLP encoded transaction bytes
 
 =over 4
 
@@ -116,9 +129,13 @@ Returns the RLP encoded transaction bytes
 
 Sets the v transaction field using the given y-parity
 
+Usage:
+
+    serialize(1) -> RLP encoded transaction bytes
+
 =over 4
 
-=item * C<$y> y-parity 
+=item * C<$y> y-parity
 
 =back
 
