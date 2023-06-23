@@ -1,3 +1,7 @@
 Revision history for Blockchain-Ethereum-Transaction
+0.002
+    - Remove cpanfile
+    - Add usage docs
+    - Remove tidy backup and cache
 0.001
     - Release

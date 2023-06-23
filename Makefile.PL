@@ -32,6 +32,8 @@ my %WriteMakefileArgs = (
         'Carp'                      => '1.50',
         'Crypt::PK::ECC'            => '0.078',
         'Crypt::Perl'               => '0.38',
+        "Getopt::Long"              => 0,
+        "Pod::Usage"                => "1.21",
     },
     dist => {
         COMPRESS => 'gzip -9f',
