@@ -44,10 +44,6 @@ sub set_v {
     return $self->{v};
 }
 
-1;
-
-__END__
-
 =pod
 
 =encoding UTF-8
@@ -73,10 +69,6 @@ Transaction abstraction for Legacy transactions
     my $raw_transaction = $transaction->serialize(1);
     ```
 
-=over 4
-
-=back
-
 =head1 METHODS
 
 =head2 sign
@@ -91,18 +83,18 @@ Determines if all required fields for the transaction type are given.
 
 Expected fields:
 
-- chain_id 
-- nonce 
-- max_fee_per_gas 
-- max_priority_fee_per_gas 
-- gas_limit 
-- to 
-- value 
-- data 
-- access_list 
-- v 
-- r 
-- s
+    - chain_id
+    - nonce
+    - max_fee_per_gas
+    - max_priority_fee_per_gas
+    - gas_limit
+    - to
+    - value
+    - data
+    - access_list
+    - v
+    - r
+    - s
 
 =over 4
 
@@ -132,7 +124,7 @@ Sets the v transaction field using the given y-parity
 
 =over 4
 
-=item * C<$y> y-parity 
+=item * C<$y> y-parity
 
 =back
 
@@ -163,3 +155,5 @@ This is free software, licensed under:
   The MIT License
 
 =cut
+
+1;

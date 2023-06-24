@@ -74,10 +74,6 @@ sub sign {
     return $self;
 }
 
-1;
-
-__END__
-
 =pod
 
 =encoding UTF-8
@@ -88,11 +84,11 @@ Blockchain::Ethereum::Transaction - Ethereum transaction abstraction
 
 =head1 VERSION
 
-Version 0.001
+Version 0.002
 
 =cut
 
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 
 =head1 SYNOPSIS
 
@@ -112,6 +108,10 @@ In most cases you don't want to use this directly, use instead:
 
 Fill up the r, s and v fields for the transaction
 
+Usage:
+
+    sign($private_key) -> $self
+
 =over 4
 
 =item * C<private_key> - hexadecimal private key (non 0x prefixed)
@@ -127,6 +127,10 @@ self
 To be implemented by the child classes, it will determine if all required fields
 for the transaction type are given.
 
+Usage:
+
+    tx_format() -> array reference
+
 =over 4
 
 =back
@@ -138,6 +142,10 @@ Returns a array reference containing the avaialble fields for the transaction ty
 =head2 serialize
 
 To be implemented by the child classes, encodes the given transaction parameters to RLP
+
+Usage:
+
+    serialize(1) -> RLP encoded transaction bytes
 
 =over 4
 
@@ -152,6 +160,10 @@ Returns the RLP encoded transaction bytes
 =head2 set_v
 
 To be implemented by the child classes, set the v transaction field using the given y-parity
+
+Usage:
+
+    set_v($v_uint) -> $v
 
 =over 4
 
@@ -186,3 +198,5 @@ This is free software, licensed under:
   The MIT License
 
 =cut
+
+1;

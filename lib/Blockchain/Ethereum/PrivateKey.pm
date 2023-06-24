@@ -21,9 +21,9 @@ sub _sign {
 
     my $dgst = Crypt::Perl::BigInt->from_bytes($whatsit);
 
-    my $priv_num = $self->{'private'};    #Math::BigInt->from_hex( $priv_hex );
+    my $priv_num = $self->{'private'};    # Math::BigInt->from_hex( $priv_hex );
 
-    my $n = $self->_curve()->{'n'};       #$curve_data->{'n'};
+    my $n = $self->_curve()->{'n'};
 
     my $key_len  = $self->max_sign_bits();
     my $dgst_len = $dgst->bit_length();
@@ -71,10 +71,6 @@ sub _sign {
     return ($r, $s, $y_parity);
 }
 
-1;
-
-__END__
-
 =pod
 
 =encoding UTF-8
@@ -91,6 +87,10 @@ the transaction.
 =head2 _sign
 
 Overwrites L<Crypt::Perl::ECDSA::PrivateKey> adding the y-parity to the response
+
+Usage:
+
+    _sign($rlp_encoded_transaction, 'sha256') -> (Math::BigInt $r, Math::BigInt $s, $v)
 
 =over 4
 
@@ -127,3 +127,5 @@ This is free software, licensed under:
   The MIT License
 
 =cut
+
+1;

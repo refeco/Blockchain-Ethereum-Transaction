@@ -2,7 +2,6 @@
 .perltidyrc
 .tidyallrc
 Changes
-cpanfile
 lib/Blockchain/Ethereum/PrivateKey.pm
 lib/Blockchain/Ethereum/Transaction.pm
 lib/Blockchain/Ethereum/Transaction/EIP1559.pm

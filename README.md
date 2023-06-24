@@ -30,6 +30,12 @@ Ethereum transaction abstraction for signing and generating raw transactions
     print unpack("H*", $raw_transaction);
 ```
 
+## Standalone version
+
+```bash
+ethereum-raw-tx --tx-type=legacy --chain-id=0x1 --nonce=0x9 --gas-price=0x4A817C800 --gas-limit=0x5208 --to=0x3535353535353535353535353535353535353535 --value=0xDE0B6B3A7640000 --pk=0x4646464646464646464646464646464646464646464646464646464646464646
+```
+
 # Supported Transaction Types
 
 - Legacy
@@ -67,7 +73,7 @@ You can also look for information at:
 
 # License and Copyright
 
-This software is Copyright (c) 2022 by REFECO.
+This software is Copyright (c) 2023 by REFECO.
 
 This is free software, licensed under:
 
