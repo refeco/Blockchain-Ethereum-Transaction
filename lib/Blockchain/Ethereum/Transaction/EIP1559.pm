@@ -54,7 +54,7 @@ Blockchain::Ethereum::Transaction::EIP1559 - Ethereum Fee Market transaction abs
 
 =head1 SYNOPSIS
 
-Transaction abstraction for Legacy transactions
+Transaction abstraction for EIP1559 Fee Market transactions
 
     my $transaction = Blockchain::Ethereum::Transaction::EIP1559->new(
         nonce                    => '0x0',
