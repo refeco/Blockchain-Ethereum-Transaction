@@ -56,13 +56,15 @@ Blockchain::Ethereum::Transaction::EIP1559 - Ethereum Fee Market transaction abs
 
 Transaction abstraction for Legacy transactions
 
-    my $transaction = Blockchain::Ethereum::Transaction::Legacy->new(
-        nonce     => '0x9',
-        gas_price => '0x4A817C800',
-        gas_limit => '0x5208',
-        to        => '0x3535353535353535353535353535353535353535',
-        value     => '0xDE0B6B3A7640000',
-        chain_id  => '0x1'
+    my $transaction = Blockchain::Ethereum::Transaction::EIP1559->new(
+        nonce                    => '0x0',
+        max_fee_per_gas          => '0x9',
+        max_priority_fee_per_gas => '0x0',
+        gas_limit                => '0x1DE2B9',
+        to                       => '0x3535353535353535353535353535353535353535'
+        value                    => '0xDE0B6B3A7640000',
+        data                     => '0x',
+        chain_id                 => '0x539'
     );
 
     $transaction->sign('4646464646464646464646464646464646464646464646464646464646464646');
