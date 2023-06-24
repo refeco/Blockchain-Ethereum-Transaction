@@ -52,15 +52,13 @@ Blockchain::Ethereum::Transaction::Legacy - Ethereum Legacy transaction abstract
 
 Transaction abstraction for Legacy transactions
 
-    my $transaction = Blockchain::Ethereum::Transaction::E->new(
-        nonce                    => '0x0',
-        max_fee_per_gas          => '0x9',
-        max_priority_fee_per_gas => '0x0',
-        gas_limit                => '0x1DE2B9',
-        value                    => '0x1',
-        data                     => '0x0',
-        chain_id                 => '0x1'
-    );
+     my $transaction = Blockchain::Ethereum::Transaction::Legacy->new(
+        nonce     => '0x9',
+        gas_price => '0x4A817C800',
+        gas_limit => '0x5208',
+        to        => '0x3535353535353535353535353535353535353535',
+        value     => '0xDE0B6B3A7640000',
+        chain_id  => '0x1'
 
     $transaction->sign('4646464646464646464646464646464646464646464646464646464646464646');
     my $raw_transaction = $transaction->serialize(1);
