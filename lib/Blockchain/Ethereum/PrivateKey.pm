@@ -71,10 +71,6 @@ sub _sign {
     return ($r, $s, $y_parity);
 }
 
-1;
-
-__END__
-
 =pod
 
 =encoding UTF-8
@@ -131,3 +127,5 @@ This is free software, licensed under:
   The MIT License
 
 =cut
+
+1;

@@ -6,7 +6,7 @@ ethereum-raw-tx
 
 =head1 SYNOPSIS
 
-ethereum-tx [options]
+ethereum-raw-tx [options]
 
 Options:
 
@@ -23,7 +23,7 @@ Options:
 
 Example:
 
-    bin/ethereum-raw-tx --tx-type=legacy --chain-id=0x1 --nonce=0x9 --gas-price=0x4A817C800 --gas-limit=0x5208 --to=0x3535353535353535353535353535353535353535 --value=0xDE0B6B3A7640000 --pk=0x4646464646464646464646464646464646464646464646464646464646464646
+    ethereum-raw-tx --tx-type=legacy --chain-id=0x1 --nonce=0x9 --gas-price=0x4A817C800 --gas-limit=0x5208 --to=0x3535353535353535353535353535353535353535 --value=0xDE0B6B3A7640000 --pk=0x4646464646464646464646464646464646464646464646464646464646464646
 
 =head1 DESCRIPTION
 

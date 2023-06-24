@@ -74,10 +74,6 @@ sub sign {
     return $self;
 }
 
-1;
-
-__END__
-
 =pod
 
 =encoding UTF-8
@@ -88,11 +84,11 @@ Blockchain::Ethereum::Transaction - Ethereum transaction abstraction
 
 =head1 VERSION
 
-Version 0.001
+Version 0.002
 
 =cut
 
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 
 =head1 SYNOPSIS
 
@@ -202,3 +198,5 @@ This is free software, licensed under:
   The MIT License
 
 =cut
+
+1;

@@ -10,6 +10,7 @@ my %WriteMakefileArgs = (
     ABSTRACT_FROM    => 'lib/Blockchain/Ethereum/Transaction.pm',
     LICENSE          => 'mit',
     MIN_PERL_VERSION => 'v5.26',
+    EXE_FILES        => ["bin/ethereum-raw-tx"],
     META_MERGE       => {
         'meta-spec' => {version => 2},
         resources   => {
@@ -27,7 +28,7 @@ my %WriteMakefileArgs = (
         'Test::More' => '0.98',
     },
     PREREQ_PM => {
-        'Blockchain::Ethereum::RLP' => '0.003',
+        'Blockchain::Ethereum::RLP' => '0.004',
         'Digest::Keccak'            => '0.05',
         'Carp'                      => '1.50',
         'Crypt::PK::ECC'            => '0.078',
