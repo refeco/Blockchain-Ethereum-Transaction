@@ -1,6 +1,7 @@
 .perlcriticrc
 .perltidyrc
 .tidyallrc
+bin/ethereum-raw-tx
 Changes
 lib/Blockchain/Ethereum/PrivateKey.pm
 lib/Blockchain/Ethereum/Transaction.pm

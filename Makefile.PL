@@ -22,13 +22,13 @@ my %WriteMakefileArgs = (
         },
     },
     CONFIGURE_REQUIRES => {
-        'ExtUtils::MakeMaker' => '0',
+        'ExtUtils::MakeMaker' => '7.70',
     },
     TEST_REQUIRES => {
         'Test::More' => '0.98',
     },
     PREREQ_PM => {
-        'Blockchain::Ethereum::RLP' => '0.004',
+        'Blockchain::Ethereum::RLP' => '0.005',
         'Digest::Keccak'            => '0.05',
         'Carp'                      => '1.50',
         'Crypt::PK::ECC'            => '0.078',

@@ -3,21 +3,21 @@ package Blockchain::Ethereum::PrivateKey;
 use v5.26;
 use strict;
 use warnings;
+no indirect ':fatal';
+use feature 'signatures';
 
 use Carp;
 
 use parent qw(Crypt::Perl::ECDSA::PrivateKey);
 
-sub new {
-    my ($class, $private_key_ref) = @_;
+sub new ($class, $private_key_ref) {
 
     my $self = bless $private_key_ref, $class;
 
     return $self;
 }
 
-sub _sign {
-    my ($self, $whatsit, $det_hashfuncname) = @_;
+sub _sign ($self, $whatsit, $det_hashfuncname) {
 
     my $dgst = Crypt::Perl::BigInt->from_bytes($whatsit);
 

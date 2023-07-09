@@ -3,15 +3,17 @@ package Blockchain::Ethereum::Transaction::Legacy;
 use v5.26;
 use strict;
 use warnings;
+no indirect ':fatal';
+use feature 'signatures';
 
 use parent qw(Blockchain::Ethereum::Transaction);
 
 sub tx_format {
+
     return [qw(chain_id nonce gas_price gas_limit to value data v r s)];
 }
 
-sub serialize {
-    my ($self, $signed) = @_;
+sub serialize ($self, $signed) {
 
     my @params = (
         $self->{nonce},    #
@@ -31,8 +33,7 @@ sub serialize {
     return $self->rlp->encode(\@params);
 }
 
-sub set_v {
-    my ($self, $y) = @_;
+sub set_v ($self, $y) {
 
     my $v = (hex $self->{chain_id}) * 2 + 35 + $y;
 

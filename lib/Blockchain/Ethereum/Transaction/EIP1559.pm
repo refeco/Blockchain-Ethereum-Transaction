@@ -3,17 +3,19 @@ package Blockchain::Ethereum::Transaction::EIP1559;
 use v5.26;
 use strict;
 use warnings;
+no indirect ':fatal';
+use feature 'signatures';
 
 use parent qw(Blockchain::Ethereum::Transaction);
 
 use constant TRANSACTION_PREFIX => pack("H*", '02');
 
 sub tx_format {
+
     return [qw(chain_id nonce max_fee_per_gas max_priority_fee_per_gas gas_limit to value data access_list v r s)];
 }
 
-sub serialize {
-    my ($self, $signed) = @_;
+sub serialize ($self, $signed) {
 
     my @params = (
         $self->{chain_id},    #
@@ -34,8 +36,7 @@ sub serialize {
     return TRANSACTION_PREFIX . $self->rlp->encode(\@params);
 }
 
-sub set_v {
-    my ($self, $y) = @_;
+sub set_v ($self, $y) {
 
     # eip-1559 uses y directly as the v point
     # instead of using recovery id as the legacy

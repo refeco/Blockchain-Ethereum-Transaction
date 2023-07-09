@@ -3,6 +3,8 @@ package Blockchain::Ethereum::Transaction;
 use v5.26;
 use strict;
 use warnings;
+no indirect ':fatal';
+use feature 'signatures';
 
 use Carp;
 use Crypt::PK::ECC;
@@ -13,19 +15,21 @@ use Blockchain::Ethereum::RLP;
 use Blockchain::Ethereum::PrivateKey;
 
 sub tx_format {
+
     croak 'tx_format method not implemented';
 }
 
 sub serialize {
+
     croak 'terialize method not implemented';
 }
 
 sub set_v {
+
     croak 'set_v method not implemented';
 }
 
-sub new {
-    my ($class, %params) = @_;
+sub new ($class, %params) {
 
     my $self = bless {}, $class;
 
@@ -41,13 +45,12 @@ sub new {
     return $self;
 }
 
-sub rlp {
-    my $self = shift;
+sub rlp ($self) {
+
     return $self->{rlp} //= Blockchain::Ethereum::RLP->new();
 }
 
-sub sign {
-    my ($self, $private_key) = @_;
+sub sign ($self, $private_key) {
 
     croak "Required parameter private key missing" unless $private_key;
 
@@ -57,7 +60,7 @@ sub sign {
     my $pk = Blockchain::Ethereum::PrivateKey->new(    #
         Crypt::Perl::ECDSA::Parse::private($importer->export_key_der('private')));
 
-    my $unsigned_rlp = $self->serialize;
+    my $unsigned_rlp = $self->serialize(0);
 
     my $tx_hash = keccak_256($unsigned_rlp);
 
@@ -84,11 +87,11 @@ Blockchain::Ethereum::Transaction - Ethereum transaction abstraction
 
 =head1 VERSION
 
-Version 0.003
+Version 0.004
 
 =cut
 
-our $VERSION = '0.003';
+our $VERSION = '0.004';
 
 =head1 SYNOPSIS
 

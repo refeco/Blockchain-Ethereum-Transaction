@@ -1,4 +1,9 @@
 Revision history for Blockchain-Ethereum-Transaction
+0.004
+    - Signatures
+    - Modules upgrades
+    - Refactoring
+    - Clean up
 0.003
     - Fix usage example
 0.002
