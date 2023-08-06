@@ -1,44 +1,38 @@
-package Blockchain::Ethereum::Transaction::Legacy;
-
 use v5.26;
-use strict;
-use warnings;
+use Object::Pad;
 
-use parent qw(Blockchain::Ethereum::Transaction);
+class Blockchain::Ethereum::Transaction::Legacy :does(Blockchain::Ethereum::Transaction) {
+    field $gas_price :reader :writer :param;
 
-sub tx_format {
-    return [qw(chain_id nonce gas_price gas_limit to value data v r s)];
-}
+    method serialize {
 
-sub serialize {
-    my ($self, $signed) = @_;
+        my @params = (
+            $self->nonce,    #
+            $self->gas_price,
+            $self->gas_limit,
+            $self->to,
+            $self->value,
+            $self->data,
+        );
 
-    my @params = (
-        $self->{nonce},    #
-        $self->{gas_price},
-        $self->{gas_limit},
-        $self->{to}    // '',
-        $self->{value} // '0x0',
-        $self->{data}  // '',
-    );
+        if ($self->v && $self->r && $self->s) {
+            push(@params, $self->v, $self->r, $self->s);
+        } else {
+            push(@params, $self->chain_id, '0x', '0x');
+        }
 
-    if ($signed) {
-        push(@params, $self->{v}, $self->{r}, $self->{s});
-    } else {
-        push(@params, $self->{chain_id}, '0x', '0x');
+        return $self->rlp->encode(\@params);
     }
 
-    return $self->rlp->encode(\@params);
-}
+    method generate_v ($y_parity) {
 
-sub set_v {
-    my ($self, $y) = @_;
+        my $v = sprintf("0x%x", (hex $self->chain_id) * 2 + 35 + $y_parity);
 
-    my $v = (hex $self->{chain_id}) * 2 + 35 + $y;
+        $self->set_v($v);
+        return $v;
+    }
 
-    $self->{v} = sprintf("0x%x", $v);
-    return $v;
-}
+};
 
 =pod
 
@@ -60,8 +54,15 @@ Transaction abstraction for Legacy transactions
         value     => '0xDE0B6B3A7640000',
         chain_id  => '0x1'
 
-    $transaction->sign('4646464646464646464646464646464646464646464646464646464646464646');
-    my $raw_transaction = $transaction->serialize(1);
+    # github.com/refeco/perl-ethereum-keystore
+    my $key = Blockchain::Ethereum::Keystore::Key->new(
+        private_key => pack "H*",
+        '4646464646464646464646464646464646464646464646464646464646464646'
+    );
+
+    $key->sign_transaction($transaction);
+
+    my $raw_transaction = $transaction->serialize;
     ```
 
 =over 4
@@ -76,42 +77,15 @@ Check the parent transaction class for details L<Blockchain::Ethereum::Transacti
 
 =cut
 
-=head2 tx_format
-
-Determines if all required fields for the transaction type are given.
-
-Expected fields:
-
-    - chain_id
-    - nonce
-    - gas_price
-    - gas_limit
-    - to
-    - value
-    - data
-    - v
-    - r
-    - s
-
-=over 4
-
-=back
-
-Returns a array reference containing the avaialble fields for the transaction type
-
-=cut
-
 =head2 serialize
 
 Encodes the given transaction parameters to RLP
 
 Usage:
 
-    serialize(1) -> RLP encoded transaction bytes
+    serialize -> RLP encoded transaction bytes
 
 =over 4
-
-=item * C<$signed> boolean to idenfity if the transaction is already signed (adds v r s if true) or not
 
 =back
 
@@ -119,17 +93,17 @@ Returns the RLP encoded transaction bytes
 
 =cut
 
-=head2 set_v
+=head2 generate_v
 
-Sets the v transaction field using the given y-parity
+Generate the transaction v field using the given y-parity
 
 Usage:
 
-    serialize(1) -> RLP encoded transaction bytes
+    generate_v($y_parity) -> hexadecimal v
 
 =over 4
 
-=item * C<$y> y-parity
+=item * C<$y_parity> y-parity
 
 =back
 

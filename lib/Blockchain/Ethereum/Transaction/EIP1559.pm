@@ -1,48 +1,45 @@
-package Blockchain::Ethereum::Transaction::EIP1559;
-
 use v5.26;
-use strict;
-use warnings;
+use Object::Pad ':experimental(init_expr)';
 
-use parent qw(Blockchain::Ethereum::Transaction);
+class Blockchain::Ethereum::Transaction::EIP1559 :does(Blockchain::Ethereum::Transaction) {
+    use constant TRANSACTION_PREFIX => pack("H*", '02');
 
-use constant TRANSACTION_PREFIX => pack("H*", '02');
+    field $max_priority_fee_per_gas :reader :writer :param;
+    field $max_fee_per_gas :reader :writer :param;
+    field $access_list :reader :writer :param = [];
 
-sub tx_format {
-    return [qw(chain_id nonce max_fee_per_gas max_priority_fee_per_gas gas_limit to value data access_list v r s)];
-}
+    method serialize() {
 
-sub serialize {
-    my ($self, $signed) = @_;
+        my @params = (
+            $self->chain_id,    #
+            $self->nonce,
+            $self->max_priority_fee_per_gas,
+            $self->max_fee_per_gas,
+            $self->gas_limit,
+            $self->to,
+            $self->value,
+            $self->data,
+            $self->access_list,
+        );
 
-    my @params = (
-        $self->{chain_id},    #
-        $self->{nonce},
-        $self->{max_priority_fee_per_gas},
-        $self->{max_fee_per_gas},
-        $self->{gas_limit},
-        $self->{to}          // '',
-        $self->{value}       // '0x0',
-        $self->{data}        // '',
-        $self->{access_list} // [],
-    );
+        push(@params, $self->v, $self->r, $self->s)
+            if $self->v && $self->r && $self->s;
 
-    push(@params, $self->{v}, $self->{r}, $self->{s}) if $signed;
+        # eip-1559 transactions must be prefixed by 2 that is the
+        # transaction type
+        return TRANSACTION_PREFIX . $self->rlp->encode(\@params);
+    }
 
-    # eip-1559 transactions must be prefixed by 2 that is the
-    # transaction type
-    return TRANSACTION_PREFIX . $self->rlp->encode(\@params);
-}
+    method generate_v ($y_parity) {
 
-sub set_v {
-    my ($self, $y) = @_;
-
-    # eip-1559 uses y directly as the v point
-    # instead of using recovery id as the legacy
-    # transactions
-    $self->{v} = sprintf("0x%x", $y);
-    return $self->{v};
-}
+        # eip-1559 uses y directly as the v point
+        # instead of using recovery id as the legacy
+        # transactions
+        my $v = sprintf("0x%x", $y_parity);
+        $self->set_v($v);
+        return $v;
+    }
+};
 
 =pod
 
@@ -67,8 +64,15 @@ Transaction abstraction for EIP1559 Fee Market transactions
         chain_id                 => '0x539'
     );
 
-    $transaction->sign('4646464646464646464646464646464646464646464646464646464646464646');
-    my $raw_transaction = $transaction->serialize(1);
+    # github.com/refeco/perl-ethereum-keystore
+    my $key = Blockchain::Ethereum::Keystore::Key->new(
+        private_key => pack "H*",
+        '4646464646464646464646464646464646464646464646464646464646464646'
+    );
+
+    $key->sign_transaction($transaction);
+
+    my $raw_transaction = $transaction->serialize;
     ```
 
 =head1 METHODS
@@ -79,40 +83,15 @@ Check the parent transaction class for details L<Blockchain::Ethereum::Transacti
 
 =cut
 
-=head2 tx_format
-
-Determines if all required fields for the transaction type are given.
-
-Expected fields:
-
-    - chain_id
-    - nonce
-    - max_fee_per_gas
-    - max_priority_fee_per_gas
-    - gas_limit
-    - to
-    - value
-    - data
-    - access_list
-    - v
-    - r
-    - s
-
-=over 4
-
-=back
-
-Returns a array reference containing the avaialble fields for the transaction type
-
-=cut
-
 =head2 serialize
 
 Encodes the given transaction parameters to RLP
 
-=over 4
+Usage:
 
-=item * C<$signed> boolean to idenfity if the transaction is already signed (adds v r s if true) or not
+    serialize() -> RLP encoded transaction bytes
+
+=over 4
 
 =back
 
@@ -120,13 +99,17 @@ Returns the RLP encoded transaction bytes
 
 =cut
 
-=head2 set_v
+=head2 generate_v
 
-Sets the v transaction field using the given y-parity
+Generate the transaction v field using the given y-parity
+
+Usage:
+
+    generate_v($y_parity) -> hexadecimal v
 
 =over 4
 
-=item * C<$y> y-parity
+=item * C<$y_parity> y-parity
 
 =back
 

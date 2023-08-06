@@ -24,8 +24,15 @@ Ethereum transaction abstraction for signing and generating raw transactions
         chain_id                 => '0x539'
     );
 
-    $transaction->sign('4646464646464646464646464646464646464646464646464646464646464646');
-    my $raw_transaction = $transaction->serialize(1);
+    # github.com/refeco/perl-ethereum-keystore
+    my $key = Blockchain::Ethereum::Keystore::Key->new(
+        private_key => pack "H*",
+        '4646464646464646464646464646464646464646464646464646464646464646'
+    );
+
+    $key->sign_transaction($transaction);
+
+    my $raw_transaction = $transaction->serialize;
 
     print unpack("H*", $raw_transaction);
 ```
