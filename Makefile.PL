@@ -25,16 +25,12 @@ my %WriteMakefileArgs = (
         'ExtUtils::MakeMaker' => '7.70',
     },
     TEST_REQUIRES => {
-        'Test::More' => '0.98',
+        'Blockchain::Ethereum::Keystore::Key' => '0.001',
     },
     PREREQ_PM => {
         'Blockchain::Ethereum::RLP' => '0.005',
+        'Object::Pad'               => '0.79',
         'Digest::Keccak'            => '0.05',
-        'Carp'                      => '1.50',
-        'Crypt::PK::ECC'            => '0.078',
-        'Crypt::Perl'               => '0.38',
-        "Getopt::Long"              => 0,
-        "Pod::Usage"                => "1.21",
     },
     dist => {
         COMPRESS => 'gzip -9f',
@@ -42,23 +38,5 @@ my %WriteMakefileArgs = (
     },
     clean => {FILES => 'Blockchain-Ethereum-Transaction-*'},
 );
-
-# Compatibility with old versions of ExtUtils::MakeMaker
-unless (eval { ExtUtils::MakeMaker->VERSION('6.64'); 1 }) {
-    my $test_requires = delete $WriteMakefileArgs{TEST_REQUIRES} || {};
-    @{$WriteMakefileArgs{PREREQ_PM}}{keys %$test_requires} = values %$test_requires;
-}
-
-unless (eval { ExtUtils::MakeMaker->VERSION('6.55_03'); 1 }) {
-    my $build_requires = delete $WriteMakefileArgs{BUILD_REQUIRES} || {};
-    @{$WriteMakefileArgs{PREREQ_PM}}{keys %$build_requires} = values %$build_requires;
-}
-
-delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
-    unless eval { ExtUtils::MakeMaker->VERSION('6.52'); 1 };
-delete $WriteMakefileArgs{MIN_PERL_VERSION}
-    unless eval { ExtUtils::MakeMaker->VERSION('6.48'); 1 };
-delete $WriteMakefileArgs{LICENSE}
-    unless eval { ExtUtils::MakeMaker->VERSION('6.31'); 1 };
 
 WriteMakefile(%WriteMakefileArgs);

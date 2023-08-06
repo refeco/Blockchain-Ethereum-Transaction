@@ -40,6 +40,7 @@ use Pod::Usage;
 
 use Blockchain::Ethereum::Transaction::Legacy;
 use Blockchain::Ethereum::Transaction::EIP1559;
+use Blockchain::Ethereum::Keystore::Key;
 
 my ($tx_type, $chain_id, $nonce, $max_fee_per_gas, $max_priority_fee_per_gas, $gas_price, $gas_limit, $to, $value, $data, $private_key);
 GetOptions(
@@ -82,5 +83,12 @@ if ($tx_type eq 'eip1559') {
 my $tx = $transaction_versions{$tx_type}->new(%params);
 
 $private_key =~ s/^0x//g;
-$tx->sign($private_key);
-printf("%s\n", unpack("H*", $tx->serialize(1)));
+
+my $key = Blockchain::Ethereum::Keystore::Key->new(
+    private_key => pack "H*",
+    $private_key
+);
+
+$key->sign_transaction($tx);
+
+printf("%s\n", unpack("H*", $tx->serialize));
