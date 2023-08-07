@@ -1,6 +1,7 @@
 use v5.26;
 use Object::Pad;
 
+package Blockchain::Ethereum::Transaction::Legacy 0.004;
 class Blockchain::Ethereum::Transaction::Legacy :does(Blockchain::Ethereum::Transaction) {
     field $gas_price :reader :writer :param;
 

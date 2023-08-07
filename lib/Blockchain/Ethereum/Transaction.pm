@@ -1,6 +1,7 @@
 use v5.26;
 use Object::Pad ':experimental(init_expr)';
 
+package Blockchain::Ethereum::Transaction 0.004;
 role Blockchain::Ethereum::Transaction {
     use Carp;
     use Digest::Keccak qw(keccak_256);

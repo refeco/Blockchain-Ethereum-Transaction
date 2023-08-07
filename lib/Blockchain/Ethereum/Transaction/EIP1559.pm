@@ -1,6 +1,7 @@
 use v5.26;
 use Object::Pad ':experimental(init_expr)';
 
+package Blockchain::Ethereum::Transaction::EIP1559 0.004;
 class Blockchain::Ethereum::Transaction::EIP1559 :does(Blockchain::Ethereum::Transaction) {
     use constant TRANSACTION_PREFIX => pack("H*", '02');
 
