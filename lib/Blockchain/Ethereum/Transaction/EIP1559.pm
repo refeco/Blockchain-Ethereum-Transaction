@@ -1,50 +1,11 @@
 use v5.26;
 use Object::Pad ':experimental(init_expr)';
 
-package Blockchain::Ethereum::Transaction::EIP1559 0.004;
-class Blockchain::Ethereum::Transaction::EIP1559 :does(Blockchain::Ethereum::Transaction) {
-    use constant TRANSACTION_PREFIX => pack("H*", '02');
+package Blockchain::Ethereum::Transaction::EIP1559 0.005;
+class Blockchain::Ethereum::Transaction::EIP1559
+    :does(Blockchain::Ethereum::Transaction);
 
-    field $max_priority_fee_per_gas :reader :writer :param;
-    field $max_fee_per_gas :reader :writer :param;
-    field $access_list :reader :writer :param = [];
-
-    method serialize() {
-
-        my @params = (
-            $self->chain_id,    #
-            $self->nonce,
-            $self->max_priority_fee_per_gas,
-            $self->max_fee_per_gas,
-            $self->gas_limit,
-            $self->to,
-            $self->value,
-            $self->data,
-            $self->access_list,
-        );
-
-        push(@params, $self->v, $self->r, $self->s)
-            if $self->v && $self->r && $self->s;
-
-        # eip-1559 transactions must be prefixed by 2 that is the
-        # transaction type
-        return TRANSACTION_PREFIX . $self->rlp->encode(\@params);
-    }
-
-    method generate_v ($y_parity) {
-
-        # eip-1559 uses y directly as the v point
-        # instead of using recovery id as the legacy
-        # transactions
-        my $v = sprintf("0x%x", $y_parity);
-        $self->set_v($v);
-        return $v;
-    }
-};
-
-=pod
-
-=encoding UTF-8
+=encoding utf8
 
 =head1 NAME
 
@@ -74,15 +35,14 @@ Transaction abstraction for EIP1559 Fee Market transactions
     $key->sign_transaction($transaction);
 
     my $raw_transaction = $transaction->serialize;
-    ```
-
-=head1 METHODS
-
-=head2 sign
-
-Check the parent transaction class for details L<Blockchain::Ethereum::Transaction>
 
 =cut
+
+use constant TRANSACTION_PREFIX => pack("H*", '02');
+
+field $max_priority_fee_per_gas :reader :writer :param;
+field $max_fee_per_gas :reader :writer :param;
+field $access_list :reader :writer :param = [];
 
 =head2 serialize
 
@@ -99,6 +59,28 @@ Usage:
 Returns the RLP encoded transaction bytes
 
 =cut
+
+method serialize() {
+
+    my @params = (
+        $self->chain_id,    #
+        $self->nonce,
+        $self->max_priority_fee_per_gas,
+        $self->max_fee_per_gas,
+        $self->gas_limit,
+        $self->to,
+        $self->value,
+        $self->data,
+        $self->access_list,
+    );
+
+    push(@params, $self->v, $self->r, $self->s)
+        if $self->v && $self->r && $self->s;
+
+    # eip-1559 transactions must be prefixed by 2 that is the
+    # transaction type
+    return TRANSACTION_PREFIX . $self->rlp->encode(\@params);
+}
 
 =head2 generate_v
 
@@ -118,6 +100,20 @@ Returns the v hexadecimal value also sets the v fields from transaction
 
 =cut
 
+method generate_v ($y_parity) {
+
+    # eip-1559 uses y directly as the v point
+    # instead of using recovery id as the legacy
+    # transactions
+    my $v = sprintf("0x%x", $y_parity);
+    $self->set_v($v);
+    return $v;
+}
+
+1;
+
+__END__
+
 =head1 AUTHOR
 
 Reginaldo Costa, C<< <refeco at cpan.org> >>
@@ -125,12 +121,6 @@ Reginaldo Costa, C<< <refeco at cpan.org> >>
 =head1 BUGS
 
 Please report any bugs or feature requests to L<https://github.com/refeco/perl-ethereum-transaction>
-
-=head1 SUPPORT
-
-You can find documentation for this module with the perldoc command.
-
-    perldoc Blockchain::Ethereum::Transaction::EIP1559
 
 =head1 LICENSE AND COPYRIGHT
 
@@ -141,5 +131,3 @@ This is free software, licensed under:
   The MIT License
 
 =cut
-
-1;
