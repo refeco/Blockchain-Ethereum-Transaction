@@ -25,10 +25,10 @@ my %WriteMakefileArgs = (
         'ExtUtils::MakeMaker' => '7.70',
     },
     TEST_REQUIRES => {
-        'Blockchain::Ethereum::Keystore::Key' => '0.001',
+        'Blockchain::Ethereum::Keystore::Key' => '0.002',
     },
     PREREQ_PM => {
-        'Blockchain::Ethereum::RLP' => '0.005',
+        'Blockchain::Ethereum::RLP' => '0.006',
         'Object::Pad'               => '0.79',
         'Digest::Keccak'            => '0.05',
     },
