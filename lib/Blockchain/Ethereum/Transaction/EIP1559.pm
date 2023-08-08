@@ -2,7 +2,6 @@ use v5.26;
 use Object::Pad ':experimental(init_expr)';
 
 package Blockchain::Ethereum::Transaction::EIP1559 0.005;
-
 class Blockchain::Ethereum::Transaction::EIP1559
     :does(Blockchain::Ethereum::Transaction);
 
