@@ -1,7 +1,7 @@
 use v5.26;
 use Object::Pad ':experimental(init_expr)';
 
-package Blockchain::Ethereum::Transaction 0.005;
+package Blockchain::Ethereum::Transaction 0.006;
 role Blockchain::Ethereum::Transaction;
 
 =encoding utf8
@@ -99,6 +99,14 @@ method hash {
 
     return keccak_256($self->serialize);
 }
+
+# In case of Math::BigInt given for any params, get the hex value
+method _equalize_params ($params) {
+
+    return [map { ref $_ eq 'Math::BigInt' ? $_->as_hex : $_ } $params->@*];
+}
+
+method export_as_rpc
 
 1;
 
