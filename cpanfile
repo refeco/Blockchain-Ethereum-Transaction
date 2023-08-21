@@ -3,5 +3,5 @@ requires 'Object::Pad', '0.79';
 requires 'Digest::Keccak', '0.05';
 
 on 'test' => sub {
-  requires 'Blockchain::Ethereum::Keystore::Key', '0.002';
+  requires 'Blockchain::Ethereum::Keystore', '0.003';
 };
