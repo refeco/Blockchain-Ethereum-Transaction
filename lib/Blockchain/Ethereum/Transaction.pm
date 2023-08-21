@@ -106,8 +106,6 @@ method _equalize_params ($params) {
     return [map { ref $_ eq 'Math::BigInt' ? $_->as_hex : $_ } $params->@*];
 }
 
-method export_as_rpc
-
 1;
 
 __END__
