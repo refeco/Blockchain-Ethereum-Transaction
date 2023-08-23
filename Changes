@@ -1,4 +1,6 @@
 Revision history for Blockchain-Ethereum-Transaction
+0.007
+    - Update dependency list
 0.006
     - Math::BigInt support
 0.005
