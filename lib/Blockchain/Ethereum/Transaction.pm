@@ -1,7 +1,7 @@
 use v5.26;
 use Object::Pad ':experimental(init_expr)';
 
-package Blockchain::Ethereum::Transaction 0.007;
+package Blockchain::Ethereum::Transaction 0.008;
 role Blockchain::Ethereum::Transaction;
 
 =encoding utf8

@@ -1,7 +1,7 @@
 use v5.26;
 use Object::Pad;
 
-package Blockchain::Ethereum::Transaction::Legacy 0.007;
+package Blockchain::Ethereum::Transaction::Legacy 0.008;
 class Blockchain::Ethereum::Transaction::Legacy
     :does(Blockchain::Ethereum::Transaction);
 
