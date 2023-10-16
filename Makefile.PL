@@ -19,15 +19,16 @@ my %WriteMakefileArgs = (
   "LICENSE" => "mit",
   "MIN_PERL_VERSION" => "5.026000",
   "NAME" => "Blockchain::Ethereum::Transaction",
-  "PREREQ_PM" => {},
-  "TEST_REQUIRES" => {
-    "Blockchain::Ethereum::Keystore" => "0.008",
+  "PREREQ_PM" => {
     "Blockchain::Ethereum::RLP" => "0.009",
     "Crypt::Digest::Keccak256" => "0.078",
+    "Object::Pad" => "0.79"
+  },
+  "TEST_REQUIRES" => {
+    "Blockchain::Ethereum::Keystore" => "0.008",
     "File::Spec" => 0,
     "IO::Handle" => 0,
     "IPC::Open3" => 0,
-    "Object::Pad" => "0.79",
     "Test::CheckDeps" => "0.010",
     "Test::More" => "0.94"
   },
