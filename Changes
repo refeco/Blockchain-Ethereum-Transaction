@@ -1,4 +1,6 @@
-Revision history for Blockchain-Ethereum-Transaction
+{{$NEXT}}
+    [Improvements]
+    - Dist::Zilla
 0.007
     - Update dependency list
 0.006

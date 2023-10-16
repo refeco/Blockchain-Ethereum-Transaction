@@ -48,6 +48,8 @@ Supported transaction types:
 
 =item * B<EIP1559 Fee Market>
 
+=back
+
 =cut
 
 use Carp;
