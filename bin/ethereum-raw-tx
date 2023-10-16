@@ -1,8 +1,9 @@
 #!/usr/bin/env perl
+# PODNAME: ethereum-raw-tx
+# ABSTRACT: Command line raw transaction creation and signing
 
-=head1 NAME
-
-ethereum-raw-tx
+# AUTHORITY
+# VERSION
 
 =head1 SYNOPSIS
 

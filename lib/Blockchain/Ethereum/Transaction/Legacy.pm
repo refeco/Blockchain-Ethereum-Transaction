@@ -1,15 +1,13 @@
 use v5.26;
 use Object::Pad;
+# ABSTRACT: Ethereum Legacy transaction abstraction
 
-package Blockchain::Ethereum::Transaction::Legacy 0.008;
+package Blockchain::Ethereum::Transaction::Legacy;
 class Blockchain::Ethereum::Transaction::Legacy
     :does(Blockchain::Ethereum::Transaction);
 
-=encoding utf8
-
-=head1 NAME
-
-Blockchain::Ethereum::Transaction::Legacy - Ethereum Legacy transaction abstraction
+# AUTHORITY
+# VERSION
 
 =head1 SYNOPSIS
 
@@ -37,13 +35,9 @@ Transaction abstraction for Legacy transactions
 
 field $gas_price :reader :writer :param;
 
-=head2 serialize
+=method serialize
 
 Encodes the given transaction parameters to RLP
-
-Usage:
-
-    serialize -> RLP encoded transaction bytes
 
 =over 4
 
@@ -75,13 +69,9 @@ method serialize {
     return $self->rlp->encode(\@params);
 }
 
-=head2 generate_v
+=method generate_v
 
 Generate the transaction v field using the given y-parity
-
-Usage:
-
-    generate_v($y_parity) -> hexadecimal v
 
 =over 4
 
@@ -102,23 +92,3 @@ method generate_v ($y_parity) {
 }
 
 1;
-
-__END__
-
-=head1 AUTHOR
-
-Reginaldo Costa, C<< <refeco at cpan.org> >>
-
-=head1 BUGS
-
-Please report any bugs or feature requests to L<https://github.com/refeco/perl-ethereum-transaction>
-
-=head1 LICENSE AND COPYRIGHT
-
-This software is Copyright (c) 2023 by REFECO.
-
-This is free software, licensed under:
-
-  The MIT License
-
-=cut
