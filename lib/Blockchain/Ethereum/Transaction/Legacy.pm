@@ -1,17 +1,10 @@
-use v5.26;
+package Blockchain::Ethereum::Transaction::Legacy;
 
+use v5.26;
 use strict;
 use warnings;
-no indirect;
-use feature 'signatures';
 
-use Object::Pad;
 # ABSTRACT: Ethereum Legacy transaction abstraction
-
-package Blockchain::Ethereum::Transaction::Legacy;
-class Blockchain::Ethereum::Transaction::Legacy
-    :does(Blockchain::Ethereum::Transaction);
-
 # AUTHORITY
 # VERSION
 
@@ -39,7 +32,24 @@ Transaction abstraction for Legacy transactions
 
 =cut
 
-field $gas_price :reader :writer :param;
+use parent 'Blockchain::Ethereum::Transaction';
+
+sub new {
+    my ($class, %args) = @_;
+
+    my $self = $class->SUPER::new(%args);
+
+    foreach (qw( gas_price )) {
+        $self->{$_} = $args{$_} if exists $args{$_};
+    }
+
+    bless $self, $class;
+    return $self;
+}
+
+sub gas_price {
+    return shift->{gas_price};
+}
 
 =method serialize
 
@@ -53,7 +63,8 @@ Returns the RLP encoded transaction bytes
 
 =cut
 
-method serialize {
+sub serialize {
+    my $self = shift;
 
     my @params = (
         $self->nonce,    #
@@ -89,7 +100,8 @@ Returns the v hexadecimal value also sets the v fields from transaction
 
 =cut
 
-method generate_v ($y_parity) {
+sub generate_v {
+    my ($self, $y_parity) = @_;
 
     my $v = sprintf("0x%x", (hex $self->chain_id) * 2 + 35 + $y_parity);
 

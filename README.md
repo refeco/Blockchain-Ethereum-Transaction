@@ -4,7 +4,7 @@ Blockchain::Ethereum::Transaction - Ethereum transaction abstraction
 
 # VERSION
 
-version 0.010
+version 0.011
 
 # SYNOPSIS
 
