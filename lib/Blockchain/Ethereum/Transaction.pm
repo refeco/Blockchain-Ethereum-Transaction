@@ -1,16 +1,10 @@
-use v5.26;
+package Blockchain::Ethereum::Transaction;
 
+use v5.26;
 use strict;
 use warnings;
-no indirect;
-use feature 'signatures';
 
-use Object::Pad ':experimental(init_expr)';
 # ABSTRACT: Ethereum transaction abstraction
-
-package Blockchain::Ethereum::Transaction;
-role Blockchain::Ethereum::Transaction;
-
 # AUTHORITY
 # VERSION
 
@@ -63,17 +57,75 @@ use Crypt::Digest::Keccak256 qw(keccak256);
 
 use Blockchain::Ethereum::RLP;
 
-field $chain_id :reader :writer :param;
-field $nonce :reader :writer :param;
-field $gas_limit :reader :writer :param;
-field $to :reader :writer :param    //= '';
-field $value :reader :writer :param //= '0x0';
-field $data :reader :writer :param  //= '';
-field $v :reader :writer :param = undef;
-field $r :reader :writer :param = undef;
-field $s :reader :writer :param = undef;
+sub new {
+    my ($class, %args) = @_;
 
-field $rlp :reader = Blockchain::Ethereum::RLP->new();
+    my $self = bless {}, $class;
+
+    foreach (qw(chain_id nonce gas_limit to value data v r s)) {
+        $self->{$_} = $args{$_} if exists $args{$_};
+    }
+
+    return $self;
+}
+
+sub rlp {
+    my $self = shift;
+
+    return $self->{rlp} //= Blockchain::Ethereum::RLP->new;
+}
+
+sub chain_id {
+    return shift->{chain_id};
+}
+
+sub nonce {
+    return shift->{nonce};
+}
+
+sub gas_limit {
+    return shift->{gas_limit};
+}
+
+sub to {
+    return shift->{to} // '';
+}
+
+sub value {
+    return shift->{value} // '0x0';
+}
+
+sub data {
+    return shift->{data} // '';
+}
+
+sub v {
+    return shift->{v};
+}
+
+sub set_v {
+    my ($self, $v) = @_;
+    $self->{v} = $v;
+}
+
+sub r {
+    return shift->{r};
+}
+
+sub set_r {
+    my ($self, $r) = @_;
+    $self->{r} = $r;
+}
+
+sub s {
+    my $self = shift;
+    return $self->{s};
+}
+
+sub set_s {
+    my ($self, $s) = @_;
+    $self->{s} = $s;
+}
 
 =method serialize
 
@@ -87,7 +139,9 @@ Returns the RLP encoded transaction bytes
 
 =cut
 
-method serialize;
+sub serialize {
+    croak "serialize method not implemented";
+}
 
 =method generate_v
 
@@ -103,7 +157,9 @@ Returns the v hexadecimal value also sets the v fields from transaction
 
 =cut
 
-method generate_v;
+sub generate_v {
+    croak "generate_v method not implemented";
+}
 
 =method hash
 
@@ -117,13 +173,15 @@ Returns the SHA3 transaction hash bytes
 
 =cut
 
-method hash {
+sub hash {
+    my $self = shift;
 
     return keccak256($self->serialize);
 }
 
 # In case of Math::BigInt given for any params, get the hex value
-method _equalize_params ($params) {
+sub _equalize_params {
+    my ($self, $params) = @_;
 
     return [map { ref $_ eq 'Math::BigInt' ? $_->as_hex : $_ } $params->@*];
 }
